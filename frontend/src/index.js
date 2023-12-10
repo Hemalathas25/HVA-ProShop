@@ -15,6 +15,7 @@ import './assets/style/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import PrivateRoutes from './components/PrivateRoutes';
+import AdminRoutes from './components/AdminRoutes';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
@@ -24,12 +25,23 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
-
+import ProfileScreen from './screens/ProfileScreen';
+import OrderListScreen from './screens/Admin/OrderListScreen';
+import ProductListScreen from './screens/Admin/ProductListScreen';
+import ProductEditScreen from './screens/Admin/ProductEditScreen';
+import UserListScreen from './screens/Admin/UserListScreen';
+import UserEditScreen from './screens/Admin/UserEditScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
+      <Route path='/search/:keyword' element={<HomeScreen />} />
+      <Route path='/page/:pageNumber' element={<HomeScreen />} />
+      <Route
+       path='/search/:keyword/page/:pageNumber' 
+       element={<HomeScreen />} 
+       />
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/login' element={<LoginScreen />} />
@@ -40,7 +52,17 @@ const router = createBrowserRouter(
       <Route path='/payment' element={<PaymentScreen />} />
       <Route path='/placeorder' element={<PlaceOrderScreen />} />
       <Route path='/order/:id' element={<OrderScreen />} />
-     
+      <Route path='/profile' element={<ProfileScreen />} />
+      </Route>
+
+      <Route path='' element={<AdminRoutes />}>
+      <Route path='/admin/orderlist' element={<OrderListScreen />} />
+      <Route path='/admin/productlist' element={<ProductListScreen />} />
+      <Route path='/admin/productlist/:pageNumber' element={<ProductListScreen />} />
+      <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
+      <Route path='/admin/userlist' element={<UserListScreen />} />
+      <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+      
       </Route>
     </Route>
    

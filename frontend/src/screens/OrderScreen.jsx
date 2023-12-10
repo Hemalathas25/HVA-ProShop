@@ -5,10 +5,8 @@ import {
     Col,
     ListGroup,
     Image, 
-    Form, 
     Button, 
-    Card, 
-    ListGroupItem 
+    Card,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -21,7 +19,8 @@ import Loader from '../components/Loader';
 import { 
     useGetOrderDetailsQuery,
     usePayOrderMutation, 
-    useGetPayPalClientIdQuery 
+    useGetPayPalClientIdQuery,
+    useDeliverOrderMutation,
 } from '../slices/ordersApiSlice';
 
 const OrderScreen = () => {
@@ -35,6 +34,8 @@ const OrderScreen = () => {
     } = useGetOrderDetailsQuery(orderId);
 
     const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+    const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
 
     const [{ isPending }, paypalDispatch ] = usePayPalScriptReducer();
 
@@ -100,6 +101,17 @@ const OrderScreen = () => {
         .then((orderId) => {
             return orderId;
         });
+     }
+
+
+     const deliverOrderHandler = async () => { 
+        try {
+            await deliverOrder(orderId);
+            refetch();
+            toast.success('Order delivered');
+        } catch (err) {
+            toast.error(err?.data?.message || err.message);
+        }
      }
 
     return isLoading ? (
@@ -226,7 +238,17 @@ const OrderScreen = () => {
                                     )}
                                 </ListGroup.Item>
                             )}
-                            {/* PAY ORDER PLACEHOLDER */}
+                            
+                            {loadingDeliver && <Loader />}
+
+                            { userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button type='button' className='btn btn-block' onClick={deliverOrderHandler}>
+                                        Mark As Delivered
+                                    </Button>
+                                </ListGroup.Item>
+                            )}
+
                     </ListGroup>
                 </Card>
             </Col>
