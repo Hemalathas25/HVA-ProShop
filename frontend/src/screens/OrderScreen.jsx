@@ -42,7 +42,7 @@ const OrderScreen = () => {
     const { 
         data: paypal,
         isLoading: loadingPayPal, 
-        error: errorPayPal
+        error: errorPayPal,
     } = useGetPayPalClientIdQuery();
 
     const { userInfo } = useSelector((state) => state.auth);
@@ -54,7 +54,7 @@ const OrderScreen = () => {
                     type: 'resetOptions',
                     value: {
                         'client-id': paypal.clientId,
-                        //currency: 'USD',
+                         currency: 'USD',
                     }
                 });
                 paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
@@ -67,6 +67,11 @@ const OrderScreen = () => {
         }
     }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
+    /*function onApprove() {} 
+    function onApproveTest () {}
+    function onError() {}
+    function createOrder () {}*/
+
     function onApprove(data, actions) {
         return actions.order.capture().then(async function (details) {
             try {
@@ -77,12 +82,12 @@ const OrderScreen = () => {
                 toast.error(err?.data?.message || err.message);
             }
         });
+    } 
+    async function onApproveTest() { 
+       await payOrder({ orderId, details: { payer: {} } });
+               refetch();
+                toast.success('Payment successful');
     }
-    //async function onApproveTest() { 
-      //  await payOrder({ orderId, details: { payer: {} } });
-        //        refetch();
-          //      toast.success('Payment successful');
-    //}
 
     function onError(err) {
         toast.error(err.message);
@@ -105,14 +110,14 @@ const OrderScreen = () => {
 
 
      const deliverOrderHandler = async () => { 
-        try {
+        try{
             await deliverOrder(orderId);
             refetch();
             toast.success('Order delivered');
-        } catch (err) {
-            toast.error(err?.data?.message || err.message);
-        }
+     } catch (err){
+        toast.error(err?.data?.message || err.message);
      }
+     };
 
     return isLoading ? (
     <Loader />
@@ -222,10 +227,10 @@ const OrderScreen = () => {
 
                                     {isPending ? <Loader /> : (
                                         <div>
-                                           {/* <Button onClick={onApproveTest} 
+                                            <Button onClick={onApproveTest} 
                                             style={{marginBottom: '10px'}}>
                                                 Test Pay Order
-                                            </Button> */}
+                                            </Button>
 
                                         <div>
                                             <PayPalButtons
