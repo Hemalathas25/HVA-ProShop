@@ -108,7 +108,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
         if( alreadyReviewed ){
             res.status(400);
-            throw new Error('Protect already reviewed');
+            throw new Error('Product already reviewed');
         }
 
         const review = {
@@ -130,7 +130,7 @@ const createProduct = asyncHandler(async (req, res) => {
         res.status(201).json({ message: 'Review added'});
     }else {
         res.status(404);
-        throw new Error('Product not found');
+        throw new Error('Resource not found');
     }});
 
 

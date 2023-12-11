@@ -23,9 +23,25 @@ function checkFileType(file, cb){
     }
 }
 
+/* function fileFilter(req, file, cb){
+    const filetypes = \png|jpe?g|webp\;
+    const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = mimetypes.test(file.mimetype);
+
+    if (extname && mimetype){
+        cb(null, true);
+    } else {
+        cb(new Error('Image only!'), false);
+    }
+} */
 const upload = multer({
     storage,
 });
+/* const upload = multer({ storage, fileFilter });
+const uploadSingleImage = upload.single('image');
+*/
+
 
 router.post('/', upload.single('image'), (req, res) => { 
     res.send({
@@ -33,5 +49,18 @@ router.post('/', upload.single('image'), (req, res) => {
         image: `/${req.file.path}`,
     });
 });
+
+/*  router.post('/', (req, res) => {
+    uploadSingleImage(req, res, function (err){
+        if(err){
+            res.status(400).send({ message: err.message });
+        }
+            res.status(200).send({
+                message: 'Image uploaded successfully',
+                image: `/${req.file.path}`,
+            });
+    } );
+});
+*/
 
 export default router;

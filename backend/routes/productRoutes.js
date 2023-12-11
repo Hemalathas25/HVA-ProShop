@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import {
-     getProducts,
+    getProducts,
     getProductById, 
     createProduct, 
     updateProduct,
@@ -11,15 +11,19 @@ import {
  } from '../controllers/productController.js';
 
 import { protect, admin } from '../middleware/authMiddleware.js';
+import checkObjectId from '../middleware/checkObjectId.js';
 
 router.route('/').get(getProducts).post (protect,admin, createProduct);
+
+router.route('/:id/reviews').post(protect, checkObjectId, createProductReview);
+
 router.get('/top',getTopProducts);
 router
    .route('/:id')
-   .get(getProductById)
-   .put(protect, admin, updateProduct)
-   .delete(protect, admin, deleteProduct);
+   .get(checkObjectId, getProductById)
+   .put(protect, admin,checkObjectId, updateProduct)
+   .delete(protect, admin, checkObjectId, deleteProduct);
 
-router.route('/:/reviews').post(protect, createProductReview);
+router.route('/:id/reviews').post(protect, createProductReview);
 
 export default router;
