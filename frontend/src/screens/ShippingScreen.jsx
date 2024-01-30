@@ -44,12 +44,21 @@ const ShippingScreen = () => {
 
                 <Form.Group controlId="city" className="my-2">
                 <Form.Label>City</Form.Label>
-                <Form.Control
+                {/*<Form.Control
                 type='text'
                 placeholder="Enter city"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}>
-                </Form.Control>
+  </Form.Control> */}
+                <Form.Select
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}>
+                        <option value="">Select City</option>
+                        <option value="Coimbatore">Coimbatore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Namakkal">Namakkal</option>
+                        <option value="Trichy">Trichy</option>
+                    </Form.Select>
                 </Form.Group> 
 
                 <Form.Group controlId="postalCode" className="my-2">

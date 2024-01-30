@@ -1,6 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+
 // @desc   Auth user & get token
 // @route  GET / api/users/login
 // @access public
@@ -84,9 +85,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
     }
 });
 
+
+
 // @desc   Update user profile
 // @route  PUT / api/users/profile
-// @access Private
+// @access Private/Admin
 const updateUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
@@ -123,6 +126,7 @@ const getUsers = asyncHandler(async (req, res) => {
 // @desc   Get users by ID
 // @route  GET / api/users/:id
 // @access Private/Admin
+
 const getUsersByID = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id).select('-password');
 
@@ -134,9 +138,29 @@ const getUsersByID = asyncHandler(async (req, res) => {
     }
 });
 
+/*  
+    const updateUserById = asyncHandler(async (req, res) => {
+    const userId = req.params.id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $set: { someField: req.body.updatedValue } },
+        { new: true }
+    ).select('-password');
+
+    if (updatedUser) {
+        res.status(200).json(updatedUser);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+    */
+
 // @desc   Delete user
 // @route  DELETE / api/users/:id
 // @access Private/Admin
+
 const deleteUser = asyncHandler(async (req, res) => {
    const user = await User.findById(req.params.id);
 
@@ -151,12 +175,34 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('User not found');
    }
-});
+}); 
+
+ /*const deleteUser = asyncHandler(async (req, res) => {
+   const user = await User.findById(req.params.id);
+
+   if (user) {
+    if (user.isAdmin) { 
+        res.status(400);
+        throw new Error('Cannot delete admin user');
+    }
+
+    // Use atomic update to unset the user data
+    await User.updateOne(
+        { _id: user._id },
+    );
+
+    res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+}); */
 
 // @desc   Update user
 // @route  PUT / api/users/:id
 // @access Private/Admin
-const updateUser = asyncHandler(async (req, res) => {
+
+/* const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (user) {
@@ -176,7 +222,31 @@ const updateUser = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
-});
+}); */
+
+
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        const updates = {
+            name:req.body.name,
+            email:req.body.email,
+            isAdmin:Boolean(req.body.isAdmin),
+        };
+        const updatedUser = await User.findByIdAndUpdate(user,{$set: updates},{ new: true});
+        res.status(200).json({
+            _id:updatedUser._id,
+            name:updatedUser.name,
+            email:updatedUser.email,
+            isAdmin:updatedUser.isAdmin,
+        });
+    }else{
+        res.status(404);
+        throw new eRROR('User not found');
+    }
+})
+ 
 
 export {
     authUser,

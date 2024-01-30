@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+//import Dropdown from 'react-bootstrap/Dropdown';
 import { toast } from 'react-toastify';
 import CheckoutSteps from '../components/CheckoutSteps';
 import Message from '../components/Message';
@@ -13,6 +14,7 @@ import { clearCartItems } from '../slices/cartSlice';
 const PlaceOrderScreen = () => {
     const navigate = useNavigate();
     const cart = useSelector((state) => state.cart);
+    //const [selectedCity, setSelectedCity] = useState(cart.shippingAddress.city || '');
 
     const [createOrder, { isLoading, error}] = useCreateOrderMutation();
 
@@ -41,6 +43,7 @@ const PlaceOrderScreen = () => {
         } catch (error) {
             toast.error(error);
         }
+
     };
 
     return(
@@ -53,11 +56,16 @@ const PlaceOrderScreen = () => {
                     <h2>Shipping</h2>
                     <p>
                         <strong>Address:</strong>
-                        {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
+                        {cart.shippingAddress.address}, 
+                        
+                        {cart.shippingAddress.city},
+                        
+                    
                         {cart.shippingAddress.postalcode},{' '}
                         {cart.shippingAddress.country}
                     </p>
                 </ListGroup.Item>
+
                 
                 <ListGroup.Item>
                     <h2>Payment Method</h2>

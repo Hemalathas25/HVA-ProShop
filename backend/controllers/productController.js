@@ -21,7 +21,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route  GET / api/products/:id
 // @access public
 
-const getProductById = asyncHandler(async (req, res) => {
+ const getProductById = asyncHandler(async (req, res) => {
         const product = await Product.findById(req.params.id);
     
         if (product) {
@@ -31,11 +31,28 @@ const getProductById = asyncHandler(async (req, res) => {
             throw new Error('Resource not found');
         }
 
+}); 
+
+/*  const updateProductById = asyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productId },
+        { $set: { updatedField: req.body.updatedFieldValue }},
+        { new: true }
+    );
+    if(updatedProduct) {
+        res.json(updatedProduct);
+    }else{
+        res.status(404);
+        throw new Error('Resource not found');
+    }
 });
+*/
 
 // @desc   Create products
 // @route  POST/ api/products
 // @access private/Admin
+
 const createProduct = asyncHandler(async (req, res) => {
     const product = new Product({
         name: 'Sample name',
@@ -91,6 +108,25 @@ const createProduct = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('Resource not found');
     } });
+
+    /* const deleteProduct = asyncHandler(async (req, res, next) => {
+        const productId = req.params.id;
+
+        try {
+            const product = await Product.findOneAndUpdate(
+                {_id: productId }, 
+                { $set: { isDeleted: true}},
+                { new: true}
+            );
+            if(product){
+                res.status(200).json({ message: 'Product deleted'});
+            } else{
+                res.status(404);
+                throw new Error('Resource not found');
+            }
+        }
+    }) 
+    */
 
  
 // @desc   Create a new review
