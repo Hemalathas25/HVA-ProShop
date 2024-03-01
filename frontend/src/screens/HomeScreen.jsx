@@ -14,7 +14,7 @@ import { useGetProductsQuery } from '../slices/productsApiSlice';
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
- 
+
   return (
     <>
     { !keyword ? (
